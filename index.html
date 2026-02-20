@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Gxoker UBT V2.5 - Premium Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@400;600;700&family=Pyidaungsu:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #00d2ff; 
+            --secondary: #3a7bd5; 
+            --success: #00ff87; 
+            --danger: #ff0055; 
+            --dark: #0f172a; 
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Montserrat', 'Pyidaungsu', sans-serif; }
+
+        /* Animated Gradient Background */
+        body { 
+            margin: 0; 
+            height: 100dvh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            color: #fff;
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #3a7bd5, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Elements Background */
+        .floating-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            background: var(--primary);
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(100px, 100px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Glassmorphism Logic */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Train Animation */
+        .train-container { background: #ffd700; color: #000; height: 32px; display: flex; align-items: center; overflow: hidden; position: relative; z-index: 100; font-weight: 800; border-bottom: 2px solid #000; }
+        .train-text { position: absolute; white-space: nowrap; animation: trainRun 18s linear infinite; }
+        @keyframes trainRun { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        /* Login Screen */
+        #login-screen { position: fixed; inset: 0; z-index: 5000; display: flex; align-items: center; justify-content: center; padding: 15px; }
+        .login-card { width: 100%; max-width: 550px; border-radius: 30px; overflow: hidden; transform: translateY(0); transition: 0.5s; }
+        .login-header { background: linear-gradient(90deg, var(--primary), var(--secondary)); padding: 25px; text-align: center; font-family: 'Orbitron'; font-weight: bold; letter-spacing: 2px; }
+        
+        /* Form Styling */
+        .login-split { display: flex; flex-wrap: wrap; padding: 25px; gap: 20px; }
+        .u-input { width: 100%; padding: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #fff; margin-top: 8px; transition: 0.3s; }
+        .u-input:focus { border-color: var(--primary); outline: none; background: rgba(255,255,255,0.15); }
+        
+        .profile-preview { width: 110px; height: 130px; border-radius: 15px; border: 2px solid var(--primary); object-fit: cover; background: rgba(0,0,0,0.3); }
+
+        /* Buttons & Hovers */
+        .btn-start { 
+            background: linear-gradient(90deg, var(--success), #60efff); 
+            color: #000; border: none; padding: 22px; cursor: pointer; font-weight: 800; width: 100%; text-transform: uppercase; 
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-start:hover { transform: scale(1.02); filter: brightness(1.1); box-shadow: 0 0 20px rgba(0, 255, 135, 0.4); }
+        .btn-start:active { transform: scale(0.98); }
+
+        /* Exam Screen */
+        #exam-screen { display: none; flex-direction: column; height: 100dvh; background: #f8fafc; color: #1e293b; z-index: 10; }
+        .ubt-header { display: flex; background: #0f172a; color: #fff; height: 55px; }
+        .h-box { flex: 1; border-right: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
+
+        .main-view { display: flex; flex: 1; overflow: hidden; padding: 12px; gap: 12px; }
+        .q-pane, .a-pane { flex: 1; background: #fff; border-radius: 24px; padding: 20px; overflow-y: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        
+        .vocab-desc { background: #f1f5f9; padding: 20px; border-radius: 18px; line-height: 1.8; font-size: 17px; border-left: 6px solid var(--secondary); margin-bottom: 15px; animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+        .ans-item { 
+            display: flex; align-items: center; padding: 15px; border: 2px solid #e2e8f0; border-radius: 15px; 
+            cursor: pointer; transition: 0.2s; font-weight: 600; margin-bottom: 10px;
+        }
+        .ans-item:hover { transform: translateX(5px); border-color: var(--secondary); background: #f0f7ff; }
+        .ans-item.selected { background: var(--secondary); border-color: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(58, 123, 213, 0.3); }
+        .ans-num { width: 28px; height: 28px; border: 2px solid currentColor; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 12px; }
+
+        /* Footer Nav */
+        .ubt-footer { display: flex; height: 60px; background: #0f172a; }
+        .f-btn { flex: 1; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; border-right: 1px solid #1e293b; transition: 0.3s; }
+        .f-btn:hover { background: rgba(255,255,255,0.1); }
+        
+        /* Result Screen */
+        #result-screen { position: fixed; inset: 0; z-index: 7000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .cert-card { background: #fff; padding: 30px; border-radius: 30px; width: 100%; max-width: 450px; text-align: center; color: #000; border-top: 12px solid var(--secondary); }
+        
+        @media (max-width: 768px) { .main-view { flex-direction: column; } .q-pane { flex: 0.8; } }
+    </style>
+</head>
+<body>
+
+    <div class="floating-bg">
+        <div class="bubble" style="width: 400px; height: 400px; top: -100px; left: -100px;"></div>
+        <div class="bubble" style="width: 300px; height: 300px; bottom: -50px; right: -50px; background: var(--secondary);"></div>
+    </div>
+
+    <div id="login-screen">
+        <div class="login-card glass-card">
+            <div class="login-header">GXOKER စနစ်သစ်UBT</div>
+            <div class="login-split">
+                <div style="flex: 1.2; min-width: 250px;">
+                    <label style="font-size:11px; font-weight:bold; color:var(--primary);">STUDENT NAME</label>
+                    <input type="text" id="c-name" class="u-input" placeholder="Type your name...">
+                    <label style="font-size:11px; font-weight:bold; color:var(--primary); margin-top: 15px; display: block;">EXAM CATEGORY</label>
+                    <select id="c-job" class="u-input">
+                        <option>စနစ်သစ် Definition</option>
+                    </select>
+                </div>
+                <div style="flex: 0.8; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 20px; padding: 15px;">
+                    <img id="img-prev" src="https://i.imgur.com/edHMTVH.jpeg" class="profile-preview">
+                    <label for="file-input" style="background: var(--secondary); color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 10px; font-weight: bold; margin-top: 10px;">UPLOAD PHOTO</label>
+                    <input type="file" id="file-input" accept="image/*" style="display:none;">
+                </div>
+            </div>
+            <button id="start-btn" class="btn-start">START EXAMINATION</button>
+        </div>
+    </div>
+
+    <div id="exam-screen">
+        <div class="ubt-header">
+            <div class="h-box" id="d-name">USER</div>
+            <div class="h-box">SET-02</div>
+            <div class="h-box">REM: <span id="rem-count">20</span></div>
+            <div class="h-box" id="timer-val" style="color:var(--primary); font-family: 'Orbitron';">20:00</div>
+        </div>
+        <div class="train-container">
+            <div class="train-text">GXOKER UBT EXAM——— ဝေါဟာရ အထူးလေ့ကျင့်ခန်း (SET 2) ———</div>
+        </div>
+        <div class="main-view">
+            <div class="q-pane" id="q-content"></div>
+            <div class="a-pane" id="ans-list"></div>
+        </div>
+        <div class="ubt-footer">
+            <div class="f-btn" onclick="step(-1)">PREV</div>
+            <div class="f-btn" onclick="openGrid()" style="color:var(--primary);">GRID</div>
+            <div class="f-btn" onclick="step(1)">NEXT</div>
+            <div class="f-btn" id="sub-btn" style="background:var(--danger);">FINISH</div>
+        </div>
+    </div>
+
+    <div id="result-screen">
+        <div class="cert-card glass-card" style="background: #fff;">
+            <img id="r-photo" style="width: 100px; height: 120px; border: 3px solid var(--secondary); border-radius: 12px; object-fit: cover; margin-bottom: 10px;">
+            <div id="r-name" style="font-weight: 800; font-size: 20px;">NAME</div>
+            <div id="pass-fail-tag" style="font-size: 45px; font-weight: 900; margin: 10px 0; font-family: 'Orbitron';">PASS</div>
+            <div id="res-score" style="font-size: 50px; font-weight: 800; color: var(--secondary);">0</div>
+            <div id="r-stats" style="margin-bottom: 20px; font-weight: bold; color: #64748b;">Correct: 0/20</div>
+            <button style="background: var(--secondary); color: #fff; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer;" onclick="startReview()">REVIEW ANSWERS</button>
+            <button style="background: #0f172a; color: #fff; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 8px;" onclick="location.reload()">TRY AGAIN</button>
+        </div>
+    </div>
+
+<script>
+    // Questions Data (Same as provided)
+    const questions = [
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "이것은 가공된 금속 부품의 겉면을 매끄럽게 닦거나 광택을 낼 때 사용하는 천이나 종이입니다.", a: ["사포", "줄", "정", "대패"], c: 0 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "작업을 하다가 발생할 수 있는 유해한 가스나 연기, 먼지 등을 강제로 밖으로 빼내는 장치입니다.", a: ["냉방기", "환풍기", "가습기", "건조기"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "용접이나 가공 중에 튀는 불꽃이나 파편으로부터 눈을 보호하기 위해 사용하는 장비입니다.", a: ["보안경", "보안면", "귀덮개", "안전대"], c: 0 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "일정한 수입이나 지출이 생겼을 때 은행 계좌에 남은 돈을 확인하는 일입니다.", a: ["환전", "송금", "잔액 조회", "비밀번호 변경"], c: 2 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "기계의 마찰을 줄이고 부드럽게 작동하도록 윤활유를 넣거나 발라주는 작업입니다.", a: ["냉각", "급유", "건조", "세척"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "물건을 운반할 때 사용하는 기계로, 화물을 들어 올리는 포크가 달려 있고 바퀴로 이동합니다.", a: ["기중기", "화물차", "지게차", "컨베이어"], c: 2 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "사업주가 정당한 사유 없이 근로자에게 임금을 정해진 날짜에 주지 않는 상태입니다.", a: ["최저 임금", "임금 체불", "임금 인상", "법정 수당"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "농작물에 영양을 공급하기 위해 인공적으로 만든 알갱이나 가루 형태의 물질입니다.", a: ["비료", "농약", "사료", "씨앗"], c: 0 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "높은 곳에서 떨어지거나 기계에 부딪히는 등 업무 중에 발생하는 부상이나 질병을 말합니다.", a: ["대인 관계", "산업 재해", "여가 활동", "구직 활동"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "작업장의 바닥이나 기계 주위에 쌓인 먼지, 오물 등을 치워서 깨끗하게 유지하는 일입니다.", a: ["정리정돈", "청소", "소독", "환기"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "배를 타고 바다에 나가서 물고기를 잡을 때 사용하는 큰 그물입니다.", a: ["통발", "집어등", "그물", "낚싯바늘"], c: 2 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "가축에게 먹이는 풀이나 곡물 등을 섞어서 만든 먹이입니다.", a: ["사료", "비료", "농약", "영양제"], c: 0 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "전기가 흐르는 곳에 직접 닿아서 몸에 전류가 흘러 상처를 입거나 목숨을 잃는 사고입니다.", a: ["추락", "감전", "협착", "전도"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "전선을 연결하거나 뗄 때 사용하는 도구로, 끝부분에 열을 가해 납을 녹여서 사용합니다.", a: ["전기 드릴", "인두기", "그라인더", "렌치"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "외국인 근로자가 한국에서 일을 하다가 체류 기간이 끝나기 전에 허가를 받아 기간을 연장하는 일입니다.", a: ["입국 신고", "비자 연장", "사업장 변경", "퇴직 신고"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "물건을 담는 상자나 봉투를 단단히 고정하고 닫아서 밖으로 나오지 않게 하는 일입니다.", a: ["포장", "분류", "선별", "적재"], c: 0 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "기계의 회전하는 부분이나 톱날 근처에 손이나 발이 닿지 않도록 막아주는 덮개입니다.", a: ["조절 장치", "방호 덮개", "비상 정지 장치", "전원 스위치"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "나사를 조이거나 풀 때 사용하는 도구로, 머리 부분이 십자나 일자 모양으로 되어 있습니다.", a: ["망치", "드라이버", "스패너", "니퍼"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "작업 중 화재가 발생했을 때 연기를 감지하여 경보음을 울려 사람들에게 알리는 장치입니다.", a: ["소화기", "화재 경보기", "비상구", "스프링클러"], c: 1 },
+        { q: "다음 설명에 알맞은 어휘를 고르십시오.", desc: "근무 중에 갑자기 몸이 아프거나 다쳤을 때 잠시 쉬면서 안정을 취할 수 있는 곳입니다.", a: ["사무실", "식당", "휴게실", "기숙사"], c: 2 }
+    ];
+
+    let idx = 0, userAns = Array(20).fill(null), clock = 1200, timerId, userPhoto = "https://i.imgur.com/edHMTVH.jpeg", isReview = false;
+
+    // Photo Handler
+    document.getElementById('file-input').onchange = function(e) {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (event) => { userPhoto = event.target.result; document.getElementById('img-prev').src = userPhoto; };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    };
+
+    // Start Exam
+    document.getElementById('start-btn').onclick = () => {
+        const name = document.getElementById('c-name').value;
+        if(!name) return alert("Please enter your name!");
+        document.getElementById('login-screen').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('exam-screen').style.display = 'flex';
+            document.getElementById('d-name').innerText = name.toUpperCase();
+            render();
+            startTimer();
+        }, 500);
+    };
+
+    function startTimer() {
+        timerId = setInterval(() => {
+            clock--;
+            let m = Math.floor(clock/60), s = clock%60;
+            document.getElementById('timer-val').innerText = `${m}:${s<10?'0':''}${s}`;
+            if(clock <= 0) finish();
+        }, 1000);
+    }
+
+    function render() {
+        const qData = questions[idx];
+        document.getElementById('q-content').innerHTML = `
+            <div style="font-size:14px; color:var(--secondary); font-weight:700; margin-bottom:5px;">QUESTION ${idx + 1} OF 20</div>
+            <div style="font-size:16px; margin-bottom:15px; font-weight:600;">${qData.q}</div>
+            <div class="vocab-desc">${qData.desc}</div>`;
+        
+        document.getElementById('ans-list').innerHTML = qData.a.map((opt, i) => {
+            let cls = "";
+            if(userAns[idx] === i) cls = "selected";
+            if(isReview) {
+                if(i === qData.c) cls += " correct-highlight";
+                else if(userAns[idx] === i && i !== qData.c) cls += " wrong-highlight";
+            }
+            return `<div class="ans-item ${cls}" onclick="${isReview ? '' : `pick(${i})`}">
+                <div class="ans-num">${i+1}</div><div>${opt}</div>
+            </div>`;
+        }).join('');
+        
+        // Dynamic Review Highlights
+        if(isReview) {
+            const items = document.querySelectorAll('.ans-item');
+            items.forEach((item, i) => {
+                if(i === qData.c) item.style.background = "#00ff87";
+                else if(userAns[idx] === i) item.style.background = "#ff0055";
+            });
+        }
+        document.getElementById('rem-count').innerText = 20 - userAns.filter(a => a !== null).length;
+    }
+
+    window.pick = (i) => { userAns[idx] = i; render(); };
+    window.step = (d) => { if(idx+d >= 0 && idx+d < questions.length) { idx += d; render(); } };
+
+    function finish() {
+        clearInterval(timerId);
+        let correct = userAns.filter((ans, i) => ans === questions[i].c).length;
+        let score = correct * 5;
+        document.getElementById('r-name').innerText = document.getElementById('c-name').value.toUpperCase();
+        document.getElementById('r-photo').src = userPhoto;
+        document.getElementById('res-score').innerText = score;
+        document.getElementById('r-stats').innerText = `Total Correct: ${correct} / 20`;
+        const tag = document.getElementById('pass-fail-tag');
+        if(score >= 85) { tag.innerText = "PASS"; tag.style.color = "#00ff87"; }
+        else { tag.innerText = "FAIL"; tag.style.color = "#ff0055"; }
+        document.getElementById('exam-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'flex';
+    }
+
+    function startReview() {
+        isReview = true; idx = 0;
+        document.getElementById('result-screen').style.display = 'none';
+        document.getElementById('exam-screen').style.display = 'flex';
+        document.getElementById('sub-btn').innerText = "EXIT";
+        document.getElementById('sub-btn').onclick = () => location.reload();
+        render();
+    }
+
+    window.openGrid = () => {
+        let gridHtml = userAns.map((ans, i) => {
+            let bg = "background:rgba(255,255,255,0.1); border:1px solid #ddd;";
+            if(isReview) bg = ans === questions[i].c ? "background:#00ff87; color:#000;" : "background:#ff0055; color:#fff;";
+            else if(ans !== null) bg = "background:var(--secondary); color:#fff; border-color:var(--primary);";
+            return `<div onclick="idx=${i};render();closeGrid();" style="padding:12px; border-radius:12px; text-align:center; ${bg} font-weight:bold; cursor:pointer; transition:0.2s;">${i+1}</div>`;
+        }).join('');
+        
+        const popup = document.createElement('div');
+        popup.id = "grid-popup";
+        popup.style = "position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(10px); z-index:8000; display:flex; align-items:center; justify-content:center; padding:20px;";
+        popup.innerHTML = `<div class="glass-card" style="background:#fff; padding:25px; border-radius:30px; width:100%; max-width:350px;">
+            <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; margin-bottom:20px; color:#000;">${gridHtml}</div>
+            <button onclick="closeGrid()" style="width:100%; padding:15px; border-radius:12px; border:none; background:var(--dark); color:#fff; font-weight:bold; cursor:pointer;">CLOSE</button>
+        </div>`;
+        document.body.appendChild(popup);
+    };
+
+    window.closeGrid = () => document.getElementById('grid-popup').remove();
+    document.getElementById('sub-btn').onclick = () => { if(confirm("Are you sure you want to finish?")) finish(); };
+</script>
+</body>
+</html>
+
