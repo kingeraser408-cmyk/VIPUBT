@@ -3,163 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gxoker Ultimate Vocab List</title>
+    <title>EPS-TOPIK 20 Questions Guide</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700;900&family=Pyidaungsu:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;900&family=Pyidaungsu:wght@700&display=swap');
 
         :root {
-            --neon-green: #00ff88;
-            --neon-purple: #bc13fe;
-            --neon-cyan: #00d4ff;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --gradient-border: linear-gradient(135deg, var(--neon-green), var(--neon-cyan), var(--neon-purple));
+            --bg-dark: #020617;
+            --card-bg: #0f172a;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-pink: #f43f5e;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
         }
 
         body {
-            background: #020617;
-            color: #f8fafc;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             font-family: 'Noto Sans KR', 'Pyidaungsu', sans-serif;
             margin: 0;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
+            padding: 10px;
+            font-size: 13px; /* Smaller font for mobile fit */
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 550px;
-            animation: fadeIn 1s ease-in-out;
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
         }
 
-        .header-box {
+        .header {
             text-align: center;
-            padding: 30px 10px;
+            padding: 20px 0;
+            border-bottom: 1px solid #1e293b;
             margin-bottom: 20px;
         }
 
-        .header-box h1 {
-            font-size: 28px;
-            font-weight: 900;
-            background: var(--gradient-border);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        .header h1 {
+            font-size: 20px;
+            color: var(--accent-blue);
             margin: 0;
-            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Essential Vocab Grid */
-        .grid-layout {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent-blue);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
         }
 
-        /* Animated Card */
-        .vocab-card {
-            position: relative;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 18px;
-            padding: 2px; /* For the gradient border */
-            background: var(--gradient-border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: slideUp 0.6s ease-out backwards;
-        }
-
-        .vocab-card:hover {
-            transform: scale(1.03) translateY(-5px);
-            box-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
-        }
-
-        .card-inner {
-            background: #0f172a;
-            border-radius: 16px;
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .kr-text {
-            font-size: 19px;
+        .q-num {
             font-weight: 900;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
-            letter-spacing: -0.2px;
+            color: var(--accent-pink);
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .q-text {
+            color: var(--text-main);
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
         .mm-text {
-            font-size: 14px;
-            font-weight: 700;
-            color: #94a3b8;
-            text-align: right;
-            line-height: 1.4;
-        }
-
-        /* Animation Keyframes */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Staggered animation for list items */
-        .grid-layout .vocab-card:nth-child(1) { animation-delay: 0.1s; }
-        .grid-layout .vocab-card:nth-child(2) { animation-delay: 0.15s; }
-        .grid-layout .vocab-card:nth-child(3) { animation-delay: 0.2s; }
-        /* ... and so on for others */
-
-        .footer-tag {
-            text-align: center;
-            padding: 40px 0;
-            font-weight: 900;
+            color: var(--text-dim);
             font-size: 12px;
-            color: #334155;
-            letter-spacing: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: block;
         }
 
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .opt {
+            background: #1e293b;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            font-size: 11px;
+        }
+
+        .ans-box {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 900;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--accent-green);
+        }
+
+        .ans-label {
+            background: var(--accent-green);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-right: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #475569;
+            font-size: 11px;
+        }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="header-box">
-        <h1>VOCABULARY MASTER</h1>
-        <div style="color: var(--neon-purple); font-weight: 700; font-size: 13px; margin-top: 5px;">EPS-TOPIK ESSENTIAL LIST</div>
+<div class="container">
+    <div class="header">
+        <h1>EPS-TOPIK Question Guide</h1>
     </div>
 
-    <div class="grid-layout">
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">샌딩하다</span><span class="mm-text">ကော်ပတ်တိုက်သည်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">이름표</span><span class="mm-text">နာမည်ကပ်ခွါ</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">사료</span><span class="mm-text">တိရစ္ဆာန်အစာ</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">공사장</span><span class="mm-text">ဆောက်လုပ်ရေးလုပ်ငန်းခွင်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">가공 작업</span><span class="mm-text">ပြုပြင်ထုတ်လုပ်သည့်အလုပ်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">파편이 튀다</span><span class="mm-text">အပိုင်းအစများ စင်ထွက်သည်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">외국인 등록증</span><span class="mm-text">နိုင်ငံခြားသားမှတ်ပုံတင်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">재발급</span><span class="mm-text">အသစ်ပြန်လည်ထုတ်ယူခြင်း</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">출입국 사무소</span><span class="mm-text">လူဝင်မှုကြီးကြပ်ရေးရုံး</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">인터넷 강의</span><span class="mm-text">အွန်လိုင်းသင်ခန်းစာ</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">공공요금</span><span class="mm-text">အများသုံးစရိတ်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">가스 요금</span><span class="mm-text">ဂတ်စ်ခ</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">난방비</span><span class="mm-text">အပူပေးစရိတ်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">절약하다</span><span class="mm-text">ချွေတာသည်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">습관</span><span class="mm-text">အလေ့အကျင့်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">과열되다</span><span class="mm-text">အပူလွန်ကဲသည်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">자동으로</span><span class="mm-text">အလိုအလျောက်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">식히다</span><span class="mm-text">အအေးခံသည်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">취소되다</span><span class="mm-text">ပယ်ဖျက်သည်</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">급한 일</span><span class="mm-text">အရေးကြီးကိစ္စ</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">제자리</span><span class="mm-text">မူလနေရာ</span></div></div>
-        <div class="vocab-card"><div class="card-inner"><span class="kr-text">명세서</span><span class="mm-text">ငွေတောင်းခံလွှာ</span></div></div>
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁)</span>
+        <div class="q-text">이곳은 가축을 기르거나 농작물을 수확하는 곳이 아니라, 산에서 나무를 심고 가꾸며 목재를 생산하는 일을 하는 산업 현장입니다.</div>
+        <div class="mm-text">(တိရစ္ဆာန်မွေးမြူခြင်း သို့မဟုတ် သီးနှံရိတ်သိမ်းခြင်းပြုလုပ်သော နေရာမဟုတ်ဘဲ၊ တောင်ပေါ်တွင် သစ်ပင်စိုက်ပိုျးပြုစုပြီး သစ်သားထုတ်လုပ်သည့်အလုပ်ကို လုပ်ကိုင်သည့် စက်မှုလုပ်ငန်းခွင်ဖြစ်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 어업 (ရေလုပ်ငန်း)</div>
+            <div class="opt">② 축산업 (မွေးမြူရေး)</div>
+            <div class="opt">③ 임업 (သစ်တော)</div>
+            <div class="opt">④ 제조업 (ကုန်ထုတ်)</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ③ 임업</span> <span>✅</span></div>
     </div>
 
-    <div class="footer-tag">KEEP STUDYING • NO SURRENDER</div>
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၂)</span>
+        <div class="q-text">대형 선박을 건조하거나 수리하는 곳입니다. 바닷가에 위치하며 아주 큰 기중기와 복잡한 기계들이 많이 있는 거대한 작업장입니다.</div>
+        <div class="mm-text">(ကုန်တင်သင်္ဘောကြီးများကို တည်ဆောက်ခြင်း သို့မဟုတ် ပြုပြင်ခြင်းပြုလုပ်သော နေရာဖြစ်သည်။ ပင်လယ်ကမ်းခြေတွင် တည်ရှိပြီး အလွန်ကြီးမားသော ကရိန်းများနှင့် ရှုပ်ထွေးသော စက်ပစ္စည်းများစွာရှိသည့် ကြီးမားသော လုပ်ငန်းခွင်ဖြစ်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 정비소</div>
+            <div class="opt">② 조선소 (သင်္ဘောကျင်း)</div>
+            <div class="opt">③ 발전소</div>
+            <div class="opt">④ 제련소</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 조선소</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၃)</span>
+        <div class="q-text">땅속 깊은 곳에 묻혀 있는 에너지 자원을 캐내기 위해 만든 굴입니다. 공기가 부족하고 붕괴 위험이 있어 항상 안전모와 랜턴을 지참해야 합니다.</div>
+        <div class="mm-text">(မြေအောက်အနက်ပိုင်းတွင် မြှုပ်နှံနေသော စွမ်းအင်အရင်းအမြစ်များကို တူးဖော်ရန် ဖန်တီးထားသော ဂူ/တွင်းဖြစ်သည်။ လေထုမလုံလောက်ခြင်းနှင့် ပြိုကျနိုင်ခြေရှိသောကြောင့် အမြဲတမ်း ဘေးကင်းရေးဦးထုပ်နှင့် လက်နှိပ်ဓာတ်မီးတို့ကို ယူဆောင်သွားရပါမည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 터널</div>
+            <div class="opt">② 탄광 (ကျောက်မီးသွေးတွင်း)</div>
+            <div class="opt">③ 지하도</div>
+            <div class="opt">④ 하수도</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 탄광</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၄)</span>
+        <div class="q-text">손님에게 잠을 자고 쉴 수 있는 방을 제공하고, 다양한 편의 시설을 갖춘 서비스 업종입니다. 예약 확인과 체크인 서비스가 중요합니다.</div>
+        <div class="mm-text">(ဧည့်သည်များအတွက် အိပ်စက်အနားယူနိုင်သော အခန်းကို ထောက်ပံ့ပေးပြီး၊ အမျိုးမျိုးသော အဆင်ပြေစေမည့် အဆောက်အအုံများ ပါဝင်သော ဝန်ဆောင်မှုလုပ်ငန်းဖြစ်သည်။ ကြိုတင်စာရင်းသွင်းမှု အတည်ပြုခြင်းနှင့် Check-in ဝန်ဆောင်မှုသည် အရေးကြီးပါသည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 식당</div>
+            <div class="opt">② 호텔 (ဟိုတယ်)</div>
+            <div class="opt">③ 미용실</div>
+            <div class="opt">④ 편의점</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 호텔</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၅)</span>
+        <div class="q-text">바다 위에서 물고기를 모으기 위해 밤에 아주 밝은 빛을 내는 전등입니다. 주로 오징어 잡이 배에서 많이 사용합니다.</div>
+        <div class="mm-text">(ပင်လယ်ပြင်ပေါ်တွင် ငါးများကို စုစည်းရန်အတွက် ညဘက်တွင် အလွန်တောက်ပသော အလင်းရောင်ကို ပေးသော လျှပ်စစ်မီးသီးဖြစ်သည်။ အဓိကအားဖြင့် ပြည်ကြီးငါးဖမ်းသော လှေများတွင် အများဆုံး အသုံးပြုသည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 유도등</div>
+            <div class="opt">② 가로등</div>
+            <div class="opt">③ 집어등 (ငါးစုမီး)</div>
+            <div class="opt">④ 비상등</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ③ 집어등</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၆)</span>
+        <div class="q-text">원재료를 기계나 수작업을 통해 새로운 제품으로 만들어내는 산업입니다. 주로 공장에서 물건을 대량으로 생산하는 일을 의미합니다.</div>
+        <div class="mm-text">(ကုန်ကြမ်းများကို စက်ပစ္စည်း သို့မဟုတ် လက်မှုပညာဖြင့် ထုတ်ကုန်အသစ်များအဖြစ် ဖန်တီးသော လုပ်ငန်းဖြစ်သည်။ အဓိကအားဖြင့် စက်ရုံတွင် ပစ္စည်းများကို အမြောက်အမြား ထုတ်လုပ်သည့်အလုပ်ကို ဆိုလိုသည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 서비스업</div>
+            <div class="opt">② 제조업 (ကုန်ထုတ်လုပ်ငန်း)</div>
+            <div class="opt">③ 건설업</div>
+            <div class="opt">④ 유통업</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 제조업</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၇)</span>
+        <div class="q-text">손님이 주문한 음식을 만들어서 제공하고 돈을 받는 곳입니다. 주방에서의 위생 관리와 홀에서의 친절한 응대가 필요합니다.</div>
+        <div class="mm-text">(ဧည့်သည်မှာယူသော အစားအစာကို ပြုလုပ်ပေးပြီး ငွေလက်ခံသော နေရာဖြစ်သည်။ မီးဖိုချောင်၏ သန့်ရှင်းရေးစီမံမှုနှင့် ဆိုင်ခန်းအတွင်း ဖော်ရွေစွာ ဧည့်ခံမှု လိုအပ်ပါသည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 요양원</div>
+            <div class="opt">② 세탁소</div>
+            <div class="opt">③ 음식점 (စားသောက်ဆိုင်)</div>
+            <div class="opt">④ 정육점</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ③ 음식점</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၈)</span>
+        <div class="q-text">농산물이나 고기 등을 오랫동안 신선하게 보관하기 위해 기계를 사용하여 내부 온도를 아주 낮게 유지하는 장소입니다.</div>
+        <div class="mm-text">(လယ်ယာထွက်ကုန် သို့မဟုတ် အသားများကို ကြာရှည်စွာ လတ်ဆတ်စွာ သိမ်းဆည်းရန်အတွက် စက်ကို အသုံးပြု၍ အတွင်းပိုင်းအပူချိန်ကို အလွန်နိမ့်အောင် ထိန်းသိမ်းထားသော နေရာဖြစ်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 저온 창고 (အအေးခန်း)</div>
+            <div class="opt">② 자재 창고</div>
+            <div class="opt">③ 폐기물 창고</div>
+            <div class="opt">④ 숙소</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ① 저온 창고</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၉)</span>
+        <div class="q-text">배에서 그물을 끌어올리거나 무거운 물건을 들어 올릴 때 사용하는 기계입니다. 모터의 힘으로 회전하며 줄을 감습니다.</div>
+        <div class="mm-text">(လှေပေါ်တွင် ပိုက်ကွန်ကို ဆွဲတင်ခြင်း သို့မဟုတ် လေးလံသော ပစ္စည်းများကို မတင်ခြင်းပြုလုပ်ရာတွင် အသုံးပြုသော စက်ဖြစ်သည်။ မော်တာစွမ်းအားဖြင့် လည်ပတ်ပြီး ကြိုးကို လိပ်ယူသည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 양망기 (ပိုက်ဆွဲစက်)</div>
+            <div class="opt">② 탈곡기</div>
+            <div class="opt">③ 굴착기</div>
+            <div class="opt">④ 지게차</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ① 양망기</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၀)</span>
+        <div class="q-text">식당이나 호텔에서 손님이 사용한 그릇이나 침구류를 깨끗하게 닦고 정리하는 일입니다. 위생을 위해 반드시 거쳐야 하는 과정입니다.</div>
+        <div class="mm-text">(စားသောက်ဆိုင် သို့မဟုတ် ဟိုတယ်တွင် ဧည့်သည်အသုံးပြုခဲ့သော ပန်းကန်ခွက်ယောက်များ သို့မဟုတ် အိပ်ရာခင်းများကို သန့်ရှင်းအောင် ဆေးကြောသန့်စင်ပြီး စီစဉ်သည့်အလုပ်ဖြစ်သည်။ သန့်ရှင်းရေးအတွက် မဖြစ်မနေ လုပ်ဆောင်ရမည့် အဆင့်ဖြစ်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 요리</div>
+            <div class="opt">② 수리</div>
+            <div class="opt">③ 세척 (ဆေးကြောခြင်း)</div>
+            <div class="opt">④ 조립</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ③ 세척</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၁)</span>
+        <div class="q-text">산에서 큰 나무를 베거나 가지를 칠 때 사용하는 강력한 전동 도구입니다. 톱날이 체인 형태로 되어 있어 매우 위험하므로 주의해야 합니다.</div>
+        <div class="mm-text">(တောင်ပေါ်တွင် သစ်ပင်ကြီးများကို ခုတ်လှဲခြင်း သို့မဟုတ် အကိုင်းဖြတ်ခြင်းပြုလုပ်ရာတွင် အသုံးပြုသော အားကောင်းသည့် လျှပ်စစ်ကိရိယာဖြစ်သည်။ လွှသွားမှာ သံကြိုးပုံစံဖြစ်နေ၍ အလွန်အန္တရာယ်များသောကြောင့် သတိထားရမည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 전기 드릴</div>
+            <div class="opt">② 체인톱 (စက်လွှ)</div>
+            <div class="opt">③ 그라인더</div>
+            <div class="opt">④ 대패</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 체인톱</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၂)</span>
+        <div class="q-text">공장에서 물건을 포장할 때 상자를 단단히 묶어주는 기계입니다. 물건이 이동 중에 쏟아지지 않도록 고정하는 역할을 합니다.</div>
+        <div class="mm-text">(စက်ရုံတွင် ပစ္စည်းထုပ်ပိုးသည့်အခါ သေတ္တာကို မြဲမြံစွာ စည်းပေးသော စက်ဖြစ်သည်။ ပစ္စည်းများ သယ်ယူပို့ဆောင်စဉ်အတွင်း ပြန့်ကျဲမသွားစေရန် ထိန်းထားပေးသော တာဝန်ကို လုပ်ဆောင်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 결속기 (စည်းသည့်စက်)</div>
+            <div class="opt">② 압축기</div>
+            <div class="opt">③ 송풍기</div>
+            <div class="opt">④ 냉각기</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ① 결속기</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၃)</span>
+        <div class="q-text">땅 밑에 있는 석탄이나 광물을 밖으로 실어 나르는 작은 기차나 운반수단입니다. 탄광 안에서 주로 사용됩니다.</div>
+        <div class="mm-text">(မြေအောက်ရှိ ကျောက်မီးသွေး သို့မဟုတ် သတ္တုရိုင်းများကို အပြင်သို့ သယ်ယူပို့ဆောင်ပေးသော ရထားငယ် သို့မဟုတ် သယ်ယူပို့ဆောင်ရေးယာဉ်ဖြစ်သည်။ ကျောက်မီးသွေးတွင်းထဲတွင် အဓိက အသုံးပြုသည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 화물차</div>
+            <div class="opt">② 광차 (တွင်းသုံးလှည်း)</div>
+            <div class="opt">③ 승용차</div>
+            <div class="opt">④ 자전거</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 광차</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၄)</span>
+        <div class="q-text">농가나 식당에서 나오는 음식물 찌꺼기 등을 처리하여 다시 동물의 먹이로 만드는 과정이나 그 결과물입니다.</div>
+        <div class="mm-text">(လယ်သမားအိမ် သို့မဟုတ် စားသောက်ဆိုင်မှ ထွက်လာသော အစားအစာ အကြွင်းအကျန်များကို ပြုပြင်ပြီး တိရစ္ဆာန်အစာအဖြစ် ပြန်လည်ပြုလုပ်သော အဆင့် သို့မဟုတ် ထွက်ရှိလာသော ရလဒ်ဖြစ်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 비료</div>
+            <div class="opt">② 사료화 (အစာပြုလုပ်ခြင်း)</div>
+            <div class="opt">③ 농약</div>
+            <div class="opt">④ 소독</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 사료화</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၅)</span>
+        <div class="q-text">호텔이나 건물 입구에서 손님을 맞이하고 안내하며, 예약 업무를 담당하는 장소입니다.</div>
+        <div class="mm-text">(ဟိုတယ် သို့မဟုတ် အဆောက်အအုံအဝင်တွင် ဧည့်သည်ကို ကြိုဆိုလမ်းညွှန်ပေးပြီး၊ ကြိုတင်စာရင်းသွင်းမှု လုပ်ငန်းများကို တာဝန်ယူသော နေရာဖြစ်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 창고</div>
+            <div class="opt">② 프런트 (ဧည့်ကြို)</div>
+            <div class="opt">③ 주방</div>
+            <div class="opt">④ 주차장</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 프런트</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၆)</span>
+        <div class="q-text">선박의 바닥이나 기계의 녹을 제거하고 새로 페인트를 칠하여 부식을 방지하는 작업입니다.</div>
+        <div class="mm-text">(သင်္ဘော၏ ကြမ်းပြင် သို့မဟုတ် စက်ပစ္စည်းများ၏ သံချေးကို ဖယ်ရှားပြီး ဆေးသစ်သုတ်ခြင်းဖြင့် ဆွေးမြည့်မှုကို ကာကွယ်ပေးသော အလုပ်ဖြစ်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 용접</div>
+            <div class="opt">② 도장 (ဆေးသုတ်ခြင်း)</div>
+            <div class="opt">③ 절단</div>
+            <div class="opt">④ 연마</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 도장</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၇)</span>
+        <div class="q-text">고압 가스를 사용하거나 용접을 할 때 눈과 얼굴을 보호하기 위해 쓰는 장비입니다. 강한 불꽃과 유해 광선을 차단합니다.</div>
+        <div class="mm-text">(ဖိအားမြင့်ဂတ်စ်ကို သုံးစွဲခြင်း သို့မဟုတ် ဂဟေဆော်ခြင်းပြုလုပ်ရာတွင် မျက်စိနှင့် မျက်နှာကို ကာကွယ်ရန် ဝတ်ဆင်သော ကိရိယာဖြစ်သည်။ ပြင်းထန်သော မီးပွားနှင့် ဘေးဖြစ်စေသော အလင်းတန်းများကို တားဆီးပေးသည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 보안경</div>
+            <div class="opt">② 용접면 (ဂဟေမျက်နှာဖုံး)</div>
+            <div class="opt">③ 방진 마스크</div>
+            <div class="opt">④ 귀덮개</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 용접면</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၈)</span>
+        <div class="q-text">숲을 보호하기 위해 병든 나무를 잘라내거나 잡풀을 제거하여 나무가 잘 자라도록 돕는 일입니다.</div>
+        <div class="mm-text">(သစ်တောကို ကာကွယ်ရန်အတွက် ရောဂါရနေသော သစ်ပင်များကို ဖြတ်ထုတ်ခြင်း သို့မဟုတ် ပေါင်းမြက်များကို ဖယ်ရှားခြင်းဖြင့် သစ်ပင်များ ကောင်းမွန်စွာ ကြီးထွားစေရန် ကူညီပေးသောအလုပ်ဖြစ်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 벌목</div>
+            <div class="opt">② 숲 가꾸기 (သစ်တောပြုစုခြင်း)</div>
+            <div class="opt">③ 조경</div>
+            <div class="opt">④ 채굴</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 숲 가꾸기</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၁၉)</span>
+        <div class="q-text">바다에서 양식업을 할 때 그물이나 시설물이 물 위에 떠 있게 하기 위해 사용하는 커다란 공기 주머니나 플라스틱 통입니다.</div>
+        <div class="mm-text">(ပင်လယ်တွင် မွေးမြူရေးလုပ်ငန်း လုပ်ကိုင်သည့်အခါ ပိုက်ကွန် သို့မဟုတ် အဆောက်အအုံများ ရေပေါ်တွင် ပေါ်နေစေရန် အသုံးပြုသော ကြီးမားသော လေအိတ် သို့မဟုတ် ပလတ်စတစ်ပုံးဖြစ်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 바늘</div>
+            <div class="opt">② 부표 (ဗော့သီး)</div>
+            <div class="opt">③ 닻</div>
+            <div class="opt">④ 노</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 부표</span> <span>✅</span></div>
+    </div>
+
+    <div class="question-card">
+        <span class="q-num">မေးခွန်း (၂၀)</span>
+        <div class="q-text">고객에게 무형의 노동력을 제공하고 그 대가를 받는 산업 분야입니다. 호텔, 식당, 운송, 금융 등이 이에 해당합니다.</div>
+        <div class="mm-text">(ဝယ်ယူသူအား ရုပ်ဝတ္ထုမဟုတ်သော လုပ်အားကို ပေးအပ်ပြီး ၎င်း၏ အဖိုးအခကို ရယူသော စက်မှုလုပ်ငန်းကဏ္ဍဖြစ်သည်။ ဟိုတယ်၊ စားသောက်ဆိုင်၊ သယ်ယူပို့ဆောင်ရေး၊ ဘဏ္ဍာရေး စသည်တို့ ပါဝင်သည်။)</div>
+        <div class="options-grid">
+            <div class="opt">① 농업</div>
+            <div class="opt">② 서비스업 (ဝန်ဆောင်မှု)</div>
+            <div class="opt">③ 광업</div>
+            <div class="opt">④ 임업</div>
+        </div>
+        <div class="ans-box"><span><span class="ans-label">정답</span> ② 서비스업</span> <span>✅</span></div>
+    </div>
+
+    <footer>
+        CREATED BY GXOKER | EPS-TOPIK MASTER
+    </footer>
 </div>
 
 </body>
-</html>
+          </html>
+          
