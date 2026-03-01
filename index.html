@@ -1,108 +1,221 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPS-TOPIK UBT Practice</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Gxoker Ultimate UBT PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@400;700&family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .question-box { margin-bottom: 20px; }
-        .image-container img { max-width: 100%; border-radius: 5px; }
-        .options { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        button { padding: 10px; cursor: pointer; border: 1px solid #ddd; border-radius: 5px; background: #fff; text-align: left; transition: 0.3s; }
-        button:hover { background: #e7f3ff; }
-        .nav-btns { display: flex; justify-content: space-between; margin-top: 20px; }
-        .next-btn { background-color: #007bff; color: white; border: none; padding: 10px 20px; }
-        .translation-box { margin-top: 15px; padding: 10px; background: #fff8e1; border-left: 4px solid #ffc107; font-size: 0.9em; display: none; }
+        :root { --primary: #00d2ff; --secondary: #3a7bd5; --success: #00ff87; --danger: #ff0055; --dark: #080e1a; --text: #1e293b; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Montserrat', 'Pyidaungsu', sans-serif; }
+        body { background: var(--dark); margin: 0; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; color: #fff; }
+
+        /* Google Translate Styling */
+        #google_translate_element {
+            padding: 5px;
+            background: #0f172a;
+            text-align: center;
+        }
+        .goog-te-gadget-icon { display: none !important; }
+        .goog-te-gadget-simple {
+            background-color: rgba(255,255,255,0.1) !important;
+            border: 1px solid var(--primary) !important;
+            padding: 5px !important;
+            border-radius: 8px !important;
+            font-size: 12px !important;
+        }
+        .goog-te-gadget-simple span { color: #fff !important; }
+        /* Hide Top Banner */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
+
+        .screen { position: fixed; inset: 0; z-index: 5000; display: flex; align-items: center; justify-content: center; padding: 20px; background: radial-gradient(circle, #1e293b, #080e1a); }
+        .card { background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(20px); width: 100%; max-width: 450px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); text-align: center; overflow: hidden; }
+        .card-header { background: linear-gradient(90deg, var(--primary), var(--secondary)); padding: 25px; font-family: 'Orbitron'; font-weight: bold; }
+
+        #exam-screen { display: none; flex-direction: column; height: 100dvh; background: #f8fafc; color: var(--text); }
+        .ubt-header { display: flex; background: #0f172a; color: #fff; height: 55px; border-bottom: 4px solid var(--primary); }
+        .h-box { flex: 1; border-right: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px; }
+
+        .main-view { display: flex; flex-direction: column; flex: 1; overflow: hidden; padding: 12px; gap: 12px; }
+        .q-pane { flex: 1; background: #fff; border-radius: 20px; padding: 15px; border: 2px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; overflow-y: auto; position: relative; }
+        .a-pane { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; }
+
+        .ans-item { background: #fff; border-radius: 18px; border: 2px solid #e2e8f0; cursor: pointer; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; font-weight: 700; font-size: 14px; text-align: center; color: var(--text); transition: all 0.2s; }
+        .ans-item.selected { background: var(--secondary) !important; border-color: var(--primary) !important; color: #fff !important; }
+        
+        .ans-item.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #166534 !important; }
+        .ans-item.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
+
+        .ans-num { position: absolute; top: 8px; left: 8px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+
+        .audio-box { width: 100%; background: #eff6ff; padding: 8px; border-radius: 12px; border-left: 5px solid var(--secondary); margin-bottom: 5px; }
+        .audio-btn { background: var(--secondary); color: white; border: none; border-radius: 8px; font-size: 10px; padding: 5px 10px; margin-top: 5px; cursor: pointer; display: block; }
+        .audio-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .ubt-footer { display: flex; height: 70px; background: #0f172a; padding: 12px; gap: 10px; }
+        .f-btn { flex: 1; background: rgba(255,255,255,0.1); color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.3s; }
+        .f-btn.locked { opacity: 0.2; cursor: not-allowed; }
+
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 250px; margin: 10px auto; }
+        .key { background: #f1f5f9; border: none; padding: 12px; border-radius: 10px; font-size: 18px; font-weight: 800; cursor: pointer; color: var(--dark); }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h3 id="question-number">Question 1</h3>
-    <div id="display-area" class="question-box">
-        </div>
+    <div id="google_translate_element"></div>
 
-    <div class="options" id="options-area">
+    <div id="login-screen" class="screen">
+        <div class="card">
+            <div class="card-header">GXOKER SMART UBT</div>
+            <div style="padding: 35px;">
+                <input type="text" id="user-name" style="width:100%; padding:18px; background:rgba(255,255,255,0.1); border:2px solid var(--primary); border-radius:15px; color:#fff; text-align:center; font-size:18px; outline:none;" placeholder="Enter Name">
+                <button onclick="startExam()" style="width:100%; padding:18px; border-radius:15px; background:var(--success); border:none; font-weight:800; cursor:pointer; margin-top:20px;">START EXAM</button>
+            </div>
         </div>
-
-    <div id="translation" class="translation-box">
-        </div>
-
-    <div class="nav-btns">
-        <button onclick="toggleTranslation()" style="background: #6c757d; color: white;">မြန်မာပြန်ကြည့်ရန်</button>
-        <button class="next-btn" onclick="nextQuestion()">နောက်တစ်ပုဒ်</button>
     </div>
-</div>
+
+    <div id="exam-screen">
+        <div class="ubt-header">
+            <div class="h-box" id="display-name">NAME</div>
+            <div class="h-box" id="timer-val" style="color:var(--success); font-size:18px;">50:00</div>
+            <div class="h-box">Solved: <span id="rem-count">0</span>/40</div>
+        </div>
+        <div class="main-view">
+            <div class="q-pane" id="q-content"></div>
+            <div class="a-pane" id="ans-list"></div>
+        </div>
+        <div class="ubt-footer">
+            <div class="f-btn" id="btn-prev" onclick="step(-1)">PREV</div>
+            <div class="f-btn" id="btn-list" onclick="openGrid()">LIST</div>
+            <div class="f-btn" id="btn-next" onclick="step(1)">NEXT</div>
+            <div class="f-btn" id="footer-action-btn" onclick="finishExam()" style="background:var(--danger);">FINISH</div>
+        </div>
+    </div>
+
+    <div id="cb-screen" class="screen" style="display:none;">
+        <div class="card" style="background:#fff; color:#000;">
+            <div class="card-header" style="color:white; padding:15px;">COLOUR BLIND TEST</div>
+            <div style="padding: 15px;">
+                <div id="cb-timer-val" style="font-size:25px; color:var(--danger); font-family:Orbitron;">60</div>
+                <img id="cb-img" src="" style="width:160px; height:160px; border-radius:50%; margin:10px auto; display:block; border:4px solid #eee;">
+                <div id="cb-display" style="font-size:30px; font-weight:bold; height:40px; color:var(--secondary);"></div>
+                <div class="keypad">
+                    <button class="key" onclick="pressKey('1')">1</button><button class="key" onclick="pressKey('2')">2</button><button class="key" onclick="pressKey('3')">3</button>
+                    <button class="key" onclick="pressKey('4')">4</button><button class="key" onclick="pressKey('5')">5</button><button class="key" onclick="pressKey('6')">6</button>
+                    <button class="key" onclick="pressKey('7')">7</button><button class="key" onclick="pressKey('8')">8</button><button class="key" onclick="pressKey('9')">9</button>
+                    <button class="key" style="background:#ff9f43; color:white;" onclick="pressKey('DEL')">C</button><button class="key" onclick="pressKey('0')">0</button>
+                    <button class="key" style="background:var(--success); color:white;" onclick="nextCB()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="result-screen" class="screen" style="display:none;">
+        <div class="card">
+            <div class="card-header">EXAM RESULT</div>
+            <div style="padding:40px;">
+                <h1 id="res-score" style="font-size:60px; color:var(--primary); margin:0;">0</h1>
+                <p id="cb-res-text" style="color:var(--success); font-weight:bold;"></p>
+                <button onclick="reviewAnswers()" style="width:100%; padding:15px; border-radius:12px; background:var(--success); color:#000; border:none; margin-top:20px; font-weight:bold;">REVIEW ANSWERS</button>
+                <button onclick="location.reload()" style="width:100%; padding:15px; border-radius:12px; background:var(--secondary); color:#fff; border:none; margin-top:10px; font-weight:bold;">RETAKE</button>
+            </div>
+        </div>
+    </div>
 
 <script>
-    // မေးခွန်းဒေတာများ (ဒီနေရာမှာ မေးခွန်း ၄၀ အထိ ထပ်တိုးနိုင်ပါတယ်)
-    const questions = [
-        {
-            type: "reading",
-            text: "바다에서 양식업을 할 때... (ဗဟိုပြုမေးခွန်း)",
-            image: "https://via.placeholder.com/300x150?text=Buoy+Image", // ပုံရှိရင် ပုံ Link ထည့်ပါ
-            options: ["부표 (ဗော်သီး)", "그물 (ပိုက်ကွန်)", "낚시 (ငါးမျှားခြင်း)", "배 (လှေ)"],
-            answer: 0,
-            translation: "ပင်လယ်တွင် မွေးမြူရေးလုပ်ငန်းလုပ်ရာ၌ ရေပေါ်ပေါ်နေစေရန် အသုံးပြုသော လေအိတ် သို့မဟုတ် ပလတ်စတစ်ပုံး ဖြစ်သည်။"
-        },
-        {
-            type: "listening",
-            text: "နောက်တစ်ပုဒ် (Listening နမူနာ)",
-            audio: "audio/q21.mp3", // အသံဖိုင်ရှိရင် ဒါကို သုံးပါ
-            options: ["1번", "2번", "3번", "4번"],
-            answer: 2,
-            translation: "ဒါကတော့ Listening မေးခွန်းရဲ့ မြန်မာပြန်ဖြစ်ပါတယ်။"
-        }
+    // Google Translate Initialization
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'ko',
+            includedLanguages: 'my,en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+
+    // Your Existing Logic
+    const readingData = [
+        { q: "다음 내용과 관계있는 그림을 고르십시오.<br><br>짐을 싸고 있습니다.", img: null, audio: null, a: [{ t: null, i: "AA.png" }, { t: null, i: "AB.png" }, { t: null, i: "AC.png" }, { t: null, i: "AD.png" }], c: "AA.png" },
+        // ... (Add your other data here)
     ];
 
-    let currentIdx = 0;
+    const listeningData = [
+        { q: "다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.", img: null, audio: "A0.mp3", a: [{ t: null, i: "A1.png" }, { t: null, i: "A2.png" }, { t: null, i: "A3.png" }, { t: null, i: "A4.png" }], c: "A3.png" },
+        // ... (Add your other data here)
+    ];
 
-    function loadQuestion() {
-        const q = questions[currentIdx];
-        document.getElementById('question-number').innerText = `မေးခွန်း - ${currentIdx + 1}`;
-        document.getElementById('translation').style.display = 'none';
-        
-        let html = `<p>${q.text}</p>`;
-        if(q.image) html += `<div class="image-container"><img src="${q.image}"></div>`;
-        if(q.audio) html += `<audio controls><source src="${q.audio}" type="audio/mpeg"></audio>`;
-        
-        document.getElementById('display-area').innerHTML = html;
+    const cbMaster = [{ img: "cb1.jpg", ans: "12" }]; // Example data
 
-        let optHtml = "";
-        q.options.forEach((opt, i) => {
-            optHtml += `<button onclick="checkAnswer(${i})">${i+1}. ${opt}</button>`;
+    let questions = [], cbQuestions = [], idx = 0, userAns = Array(40).fill(null), playHistory = {}, cbIdx = 0, cbCorrect = 0, cbClock = 60, currentInput = "", examClock = 3000, timerId;
+    let isReviewMode = false, isPlaying = false;
+
+    const shuffle = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
+    function startExam() {
+        if(!document.getElementById('user-name').value) return alert("Enter Name!");
+        let r_shuffled = shuffle([...readingData]).slice(0, 20);
+        let l_shuffled = shuffle([...listeningData]).slice(0, 20);
+        questions = [...r_shuffled, ...l_shuffled].map(q => {
+            let originalCorrect = q.c;
+            let shuffledA = shuffle([...q.a]);
+            let newCorrectIdx = shuffledA.findIndex(opt => (opt.t === originalCorrect || opt.i === originalCorrect || opt.s === originalCorrect));
+            return { ...q, a: shuffledA, c: newCorrectIdx };
         });
-        document.getElementById('options-area').innerHTML = optHtml;
-        document.getElementById('translation').innerText = q.translation;
+        document.getElementById('display-name').innerText = document.getElementById('user-name').value.toUpperCase();
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('exam-screen').style.display = 'flex';
+        render();
+        timerId = setInterval(() => {
+            if(examClock > 0) {
+                examClock--;
+                let m = Math.floor(examClock/60), s = examClock%60;
+                document.getElementById('timer-val').innerText = `${m}:${s<10?'0':''}${s}`;
+            } else { finishExam(); }
+        }, 1000);
     }
 
-    function toggleTranslation() {
-        const trans = document.getElementById('translation');
-        trans.style.display = trans.style.display === 'none' ? 'block' : 'none';
+    function render() {
+        const qData = questions[idx];
+        let qAudioKey = `q_audio_${idx}`;
+        if(playHistory[qAudioKey] === undefined) playHistory[qAudioKey] = 0;
+        
+        let qAudioHtml = qData.audio ? ( (playHistory[qAudioKey] < 2 || isReviewMode) ? `
+            <div class="audio-box">
+                <span style="font-size:9px; color:red; font-weight:bold;">Listen: ${playHistory[qAudioKey]}/2</span>
+                <audio id="main-player" onplay="setPlaying(true)" onended="audioEnded('${qAudioKey}')" controls style="width:100%"><source src="${qData.audio}"></audio>
+            </div>` : `<div class="audio-box" style="color:red; font-size:10px; font-weight:bold;">Audio Limit Reached</div>`) : '';
+
+        document.getElementById('q-content').innerHTML = `
+            <b style="color:var(--secondary)">QUESTION ${idx+1}/40</b>
+            <p style="margin:10px 0; font-weight:bold; color:#000;">${qData.q}</p>
+            ${qAudioHtml}
+            ${qData.img ? `<img src="${qData.img}" style="max-height:150px; border-radius:10px; border:1px solid #ddd; margin-top:5px;">` : ''}`;
+        
+        document.getElementById('ans-list').innerHTML = qData.a.map((opt, i) => {
+            let reviewClass = (isReviewMode) ? (i === qData.c ? "correct" : (userAns[idx] === i ? "wrong" : "")) : "";
+            return `
+                <div class="ans-item ${userAns[idx] === i ? 'selected' : ''} ${reviewClass}" onclick="pick(${i})">
+                    <div class="ans-num">${i+1}</div>
+                    ${opt.i ? `<img src="${opt.i}" style="max-height:80px;">` : `<span>${opt.t || ''}</span>`}
+                </div>`;
+        }).join('');
     }
 
-    function nextQuestion() {
-        if(currentIdx < questions.length - 1) {
-            currentIdx++;
-            loadQuestion();
-        } else {
-            alert("မေးခွန်းများ အားလုံး ပြီးဆုံးပါပြီ။");
-        }
-    }
-
-    function checkAnswer(i) {
-        if(i === questions[currentIdx].answer) {
-            alert("မှန်ပါတယ် (정답입니다!)");
-        } else {
-            alert("မှားသွားပါတယ် (틀렸습니다!)");
-        }
-    }
-
-    // စတင်ချိန်မှာ ပထမဆုံးမေးခွန်းကို ပြပေးရန်
-    loadQuestion();
+    function setPlaying(status) { isPlaying = status; }
+    function audioEnded(key) { setPlaying(false); playHistory[key]++; render(); }
+    function pick(i) { if(!isReviewMode) { userAns[idx] = i; render(); } }
+    function step(d) { if(idx+d >= 0 && idx+d < 40) { idx += d; render(); } }
+    function finishExam() { clearInterval(timerId); document.getElementById('exam-screen').style.display='none'; document.getElementById('result-screen').style.display='flex'; }
+    // ... rest of your functions (openGrid, etc.)
 </script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
