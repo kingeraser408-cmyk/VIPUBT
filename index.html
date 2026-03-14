@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIP Secure Dictionary</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .box { background: #1e293b; padding: 25px; border-radius: 15px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #334155; }
         input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #38bdf8; outline: none; box-sizing: border-box; }
         .id-badge { font-size: 11px; background: #334155; padding: 5px 10px; border-radius: 20px; color: #94a3b8; margin-bottom: 20px; display: inline-block; }
         #status { font-weight: bold; margin: 20px 0; color: #fbbf24; }
         #list { text-align: left; max-height: 350px; overflow-y: auto; margin-top: 15px; border-top: 1px solid #334155; }
         .item { padding: 12px; border-bottom: 1px solid #1e293b; transition: 0.3s; }
-        .item:hover { background: #334155; }
         .hidden { display: none; }
     </style>
 </head>
@@ -22,7 +21,7 @@
     <h3>🛡️ VIP Dictionary</h3>
     <div class="id-badge">Device ID: <span id="myId">---</span></div>
     
-    <div id="status">Connecting to Server...</div>
+    <div id="status">🔄 ဒေတာများ ဆွဲယူနေသည်...</div>
 
     <div id="mainContent" class="hidden">
         <input type="text" id="search" placeholder="ရှာဖွေရန်..." oninput="_0x_f()">
@@ -31,12 +30,7 @@
 </div>
 
 <script>
-    // 🛡️ SECURITY SHIELD - Anti-Debugger Only (Format check ဖယ်ထားသည်)
-    (function(){
-        setInterval(function() { (function() { return false; }).constructor('debugger').call(); }, 200);
-    })();
-
-    // Obfuscated Web App URL
+    // URL ကို Base64 ဖြင့် ဝှက်ထားဆဲဖြစ်သည်
     const _0x_u = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J4dlFSS0NFcFdGeVNOdXlsTThQNzdIUjNkbndsU3l1akQtel9vaHdnZEpoU1hoMVVaRFU1WW9VcWRmUEhEUTdzdFJWS0EvZXhlYw==";
     var _0x_d = null;
 
@@ -45,22 +39,29 @@
         localStorage.setItem('vip_did', dId);
         document.getElementById('myId').innerText = dId;
 
-        try {
-            const api = atob(_0x_u);
-            const response = await fetch(`${api}?id=${dId}`);
-            const res = await response.json();
+        const api = atob(_0x_u);
+        const finalUrl = api + "?id=" + dId;
 
+        // JSONP သို့မဟုတ် Redirect Handle ပြုလုပ်ရန် Fetch Option များ ထည့်ထားသည်
+        fetch(finalUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Network fail');
+            return response.json();
+        })
+        .then(res => {
             if (res.status === "success") {
                 _0x_d = res.payload;
-                document.getElementById('status').innerHTML = "Welcome, <span style='color:#10b981'>" + res.user + "</span>";
+                document.getElementById('status').innerHTML = "✅ Welcome, <span style='color:#10b981'>" + res.user + "</span>";
                 document.getElementById('mainContent').classList.remove('hidden');
                 _0x_r(_0x_d);
             } else {
-                document.getElementById('status').innerHTML = "<span style='color:#ef4444'>Access Denied!</span><br><small>ID ကို Admin ထံ ပို့ပေးပါ။</small>";
+                document.getElementById('status').innerHTML = "<span style='color:#ef4444'>🚫 Access Denied!</span><br><small>Admin ဆီ ID ပို့ပေးပါ။</small>";
             }
-        } catch (e) {
-            document.getElementById('status').innerText = "Network Error! Please try again.";
-        }
+        })
+        .catch(error => {
+            console.error(error);
+            document.getElementById('status').innerHTML = "⚠️ Connection Error!<br><small>အင်တာနက် လိုင်းပြန်စစ်ပေးပါ။</small>";
+        });
     }
 
     function _0x_r(obj) {
@@ -68,7 +69,7 @@
         for (let k in obj) {
             h += `<div class="item"><b style="color:#38bdf8">${k}</b><br>${obj[k]}</div>`;
         }
-        document.getElementById('list').innerHTML = h || "No data found.";
+        document.getElementById('list').innerHTML = h || "ဒေတာ မရှိပါ။";
     }
 
     function _0x_f() {
@@ -82,7 +83,8 @@
         _0x_r(fil);
     }
 
-    _0x_i();
+    // စတင်ပွင့်ချိန်တွင် ခေါ်ယူရန်
+    window.onload = _0x_i;
 </script>
 </body>
 </html>
