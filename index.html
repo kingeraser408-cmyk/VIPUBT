@@ -3,87 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP UBT KR-MM Dictionary</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu&family=Noto+Sans+KR&display=swap" rel="stylesheet">
-    
+    <title>VIP Secure Dictionary</title>
     <style>
-        body { font-family: 'Pyidaungsu', sans-serif; background: #f1f5f9; padding: 20px; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 500px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 20px; }
-        .header { background: #2563eb; color: white; padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 20px; }
-        .search-box { width: 100%; padding: 12px; border: 2px solid #2563eb; border-radius: 10px; font-size: 16px; box-sizing: border-box; outline: none; }
-        .stats { font-size: 13px; color: #64748b; margin: 10px 0; font-weight: bold; }
-        .dict-card { background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 5px solid #2563eb; }
-        .kor { font-weight: bold; color: #1e3a8a; font-size: 18px; display: block; }
-        .mm { color: #475569; font-size: 16px; margin-top: 5px; display: block; }
-        .no-result { text-align: center; color: #94a3b8; margin-top: 30px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .box { background: #1e293b; padding: 25px; border-radius: 15px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #334155; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #38bdf8; outline: none; box-sizing: border-box; }
+        .id-badge { font-size: 11px; background: #334155; padding: 5px 10px; border-radius: 20px; color: #94a3b8; margin-bottom: 20px; display: inline-block; }
+        #status { font-weight: bold; margin: 20px 0; }
+        #list { text-align: left; max-height: 300px; overflow-y: auto; margin-top: 15px; border-top: 1px solid #334155; }
+        .item { padding: 10px; border-bottom: 1px solid #1e293b; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="header">
-        <h2 style="margin:0">VIP UBT Dictionary</h2>
-    </div>
+<div class="box">
+    <h3>🛡️ VIP Dictionary</h3>
+    <div id="idArea" class="id-badge">Device ID: <span id="myId">Loading...</span></div>
     
-    <input type="text" id="searchInput" class="search-box" placeholder="🔍 ရိုက်ရှာပါ..." oninput="search()">
-    <div id="stats" class="stats">စကားလုံးပေါင်း: ၀</div>
-    
-    <div id="resultList">
-        <div class="no-result">စကားလုံး ရိုက်ထည့်ပြီး ရှာဖွေပါ။</div>
+    <div id="status">ခွင့်ပြုချက် စစ်ဆေးနေသည်...</div>
+
+    <div id="mainContent" class="hidden">
+        <input type="text" id="search" placeholder="ရှာဖွေရန်..." oninput="_0x_filter()">
+        <div id="list"></div>
     </div>
 </div>
 
 <script>
-    // ပုံ ၁၀ ထဲကလို ရှာမရတဲ့ ပြဿနာကို ပြင်ရန် Base64 ဒေတာကို စနစ်တကျ ထည့်ထားခြင်း
-    const encodedData = "eyLtlZnqtZAnOiAi4ZCc4ZCY4ZC04ZCE4ZCxIiwgIuyCrOqzvCI6ICL aquarium04ZCs4ZCG4ZC64ZCs4ZCxIiwgIuyatOycoCI6ICL aquarium54ZC74ZCs4ZC64ZC74ZCsIiwgIuyVhOydtCI6ICL aquarium04ZC04ZCs4ZC4IiwgIuqwgOuwqSI6ICL aquariumY4ZC64ZCc4ZCxIn0=";
+    /* 🛡️ SELF-DEFENDING SHIELD 
+       Security: Anti-Format, Anti-Debugger, String Masking
+    */
+    (function(){
+        const _s = function() {
+            const _c = function() {
+                const _r = new RegExp('\\w+ *\\(\\) *{\\w+ *[\'|"].+[\'|"];? *}');
+                return !_r.test(_s.toString());
+            };
+            if (_c()) { while (true) { /* Self Destruct */ } }
+        };
+        _s();
+        setInterval(function() { (function() { return false; }).constructor('debugger').call(); }, 100);
+    })();
 
-    function getDecodedData() {
+    // ဝှက်ထားသော Web App URL (Base64)
+    const _0x_u = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J4dlFSS0NFcFdGeVNOdXlsTThQNzdIUjNkbndsU3l1akQtel9vaHdnZEpoU1hoMVVaRFU1WW9VcWRmUEhEUTdzdFJWS0EvZXhlYw==";
+    var _0x_data = null;
+
+    async function _0x_init() {
+        // Device ID ထုတ်ယူခြင်း (Browser Fingerprint)
+        let dId = localStorage.getItem('vip_did') || Math.random().toString(36).slice(2, 10).toUpperCase();
+        localStorage.setItem('vip_did', dId);
+        document.getElementById('myId').innerText = dId;
+
         try {
-            // " aquarium" စာသားအမှားကို ဖြတ်ထုတ်ခြင်း
-            const cleanData = encodedData.replace(/ aquarium/g, "");
-            // Base64 မှ စာသားအဖြစ် ပြောင်းလဲခြင်း
-            const decodedString = atob(cleanData); 
-            // Unicode Handling (စာလုံးမပျက်စေရန်)
-            return JSON.parse(decodeURIComponent(escape(decodedString)));
+            const api = atob(_0x_u); // URL ကို ပြန်ဖြည်ခြင်း
+            const response = await fetch(`${api}?id=${dId}`);
+            const res = await response.json();
+
+            if (res.status === "success") {
+                _0x_data = res.payload;
+                document.getElementById('status').innerHTML = "Welcome, <span style='color:#10b981'>" + res.user + "</span>";
+                document.getElementById('mainContent').classList.remove('hidden');
+                _0x_render(_0x_data);
+            } else {
+                document.getElementById('status').innerHTML = "<span style='color:#ef4444'>Access Denied!</span><br><small>ဒီ ID ကို Admin ဆီ ပို့ပေးပါ။</small>";
+            }
         } catch (e) {
-            console.error("Data error:", e);
-            return {};
+            document.getElementById('status').innerText = "Connection Error!";
         }
     }
 
-    const dictionaryData = getDecodedData();
-
-    function search() {
-        const query = document.getElementById('searchInput').value.trim().toLowerCase();
-        const resultList = document.getElementById('resultList');
-        resultList.innerHTML = "";
-        
-        if (query === "") {
-            resultList.innerHTML = '<div class="no-result">စကားလုံး ရိုက်ထည့်ပြီး ရှာဖွေပါ။</div>';
-            return;
+    function _0x_render(obj) {
+        let h = "";
+        for (let k in obj) {
+            h += `<div class="item"><b style="color:#38bdf8">${k}</b><br>${obj[k]}</div>`;
         }
+        document.getElementById('list').innerHTML = h;
+    }
 
-        let count = 0;
-        for (let [kor, mm] of Object.entries(dictionaryData)) {
-            if (kor.toLowerCase().includes(query) || mm.toLowerCase().includes(query)) {
-                resultList.innerHTML += `
-                    <div class="dict-card">
-                        <span class="kor">${kor}</span>
-                        <span class="mm">${mm}</span>
-                    </div>`;
-                count++;
+    function _0x_filter() {
+        let q = document.getElementById('search').value.toLowerCase();
+        let filtered = {};
+        for (let k in _0x_data) {
+            if (k.toLowerCase().includes(q) || _0x_data[k].toLowerCase().includes(q)) {
+                filtered[k] = _0x_data[k];
             }
         }
-
-        if (count === 0) {
-            resultList.innerHTML = '<div class="no-result">ရှာမတွေ့ပါ။</div>';
-        }
+        _0x_render(filtered);
     }
 
-    // စတင်ချိန်တွင် အရေအတွက်ပြရန်
-    document.getElementById('stats').innerText = `စကားလုံးပေါင်း: ${Object.keys(dictionaryData).length}`;
+    _0x_init();
 </script>
-
 </body>
 </html>
