@@ -9,10 +9,10 @@
         .box { background: #1e293b; padding: 25px; border-radius: 15px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #334155; }
         input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #38bdf8; outline: none; box-sizing: border-box; }
         .id-badge { font-size: 11px; background: #334155; padding: 5px 10px; border-radius: 20px; color: #94a3b8; margin-bottom: 20px; display: inline-block; }
-        #status { font-weight: bold; margin: 20px 0; }
-        #list { text-align: left; max-height: 300px; overflow-y: auto; margin-top: 15px; border-top: 1px solid #334155; }
-        .item { padding: 10px; border-bottom: 1px solid #1e293b; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #status { font-weight: bold; margin: 20px 0; color: #fbbf24; }
+        #list { text-align: left; max-height: 350px; overflow-y: auto; margin-top: 15px; border-top: 1px solid #334155; }
+        .item { padding: 12px; border-bottom: 1px solid #1e293b; transition: 0.3s; }
+        .item:hover { background: #334155; }
         .hidden { display: none; }
     </style>
 </head>
@@ -20,80 +20,69 @@
 
 <div class="box">
     <h3>🛡️ VIP Dictionary</h3>
-    <div id="idArea" class="id-badge">Device ID: <span id="myId">Loading...</span></div>
+    <div class="id-badge">Device ID: <span id="myId">---</span></div>
     
-    <div id="status">ခွင့်ပြုချက် စစ်ဆေးနေသည်...</div>
+    <div id="status">Connecting to Server...</div>
 
     <div id="mainContent" class="hidden">
-        <input type="text" id="search" placeholder="ရှာဖွေရန်..." oninput="_0x_filter()">
+        <input type="text" id="search" placeholder="ရှာဖွေရန်..." oninput="_0x_f()">
         <div id="list"></div>
     </div>
 </div>
 
 <script>
-    /* 🛡️ SELF-DEFENDING SHIELD 
-       Security: Anti-Format, Anti-Debugger, String Masking
-    */
+    // 🛡️ SECURITY SHIELD - Anti-Debugger Only (Format check ဖယ်ထားသည်)
     (function(){
-        const _s = function() {
-            const _c = function() {
-                const _r = new RegExp('\\w+ *\\(\\) *{\\w+ *[\'|"].+[\'|"];? *}');
-                return !_r.test(_s.toString());
-            };
-            if (_c()) { while (true) { /* Self Destruct */ } }
-        };
-        _s();
-        setInterval(function() { (function() { return false; }).constructor('debugger').call(); }, 100);
+        setInterval(function() { (function() { return false; }).constructor('debugger').call(); }, 200);
     })();
 
-    // ဝှက်ထားသော Web App URL (Base64)
+    // Obfuscated Web App URL
     const _0x_u = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J4dlFSS0NFcFdGeVNOdXlsTThQNzdIUjNkbndsU3l1akQtel9vaHdnZEpoU1hoMVVaRFU1WW9VcWRmUEhEUTdzdFJWS0EvZXhlYw==";
-    var _0x_data = null;
+    var _0x_d = null;
 
-    async function _0x_init() {
-        // Device ID ထုတ်ယူခြင်း (Browser Fingerprint)
+    async function _0x_i() {
         let dId = localStorage.getItem('vip_did') || Math.random().toString(36).slice(2, 10).toUpperCase();
         localStorage.setItem('vip_did', dId);
         document.getElementById('myId').innerText = dId;
 
         try {
-            const api = atob(_0x_u); // URL ကို ပြန်ဖြည်ခြင်း
+            const api = atob(_0x_u);
             const response = await fetch(`${api}?id=${dId}`);
             const res = await response.json();
 
             if (res.status === "success") {
-                _0x_data = res.payload;
+                _0x_d = res.payload;
                 document.getElementById('status').innerHTML = "Welcome, <span style='color:#10b981'>" + res.user + "</span>";
                 document.getElementById('mainContent').classList.remove('hidden');
-                _0x_render(_0x_data);
+                _0x_r(_0x_d);
             } else {
-                document.getElementById('status').innerHTML = "<span style='color:#ef4444'>Access Denied!</span><br><small>ဒီ ID ကို Admin ဆီ ပို့ပေးပါ။</small>";
+                document.getElementById('status').innerHTML = "<span style='color:#ef4444'>Access Denied!</span><br><small>ID ကို Admin ထံ ပို့ပေးပါ။</small>";
             }
         } catch (e) {
-            document.getElementById('status').innerText = "Connection Error!";
+            document.getElementById('status').innerText = "Network Error! Please try again.";
         }
     }
 
-    function _0x_render(obj) {
+    function _0x_r(obj) {
         let h = "";
         for (let k in obj) {
             h += `<div class="item"><b style="color:#38bdf8">${k}</b><br>${obj[k]}</div>`;
         }
-        document.getElementById('list').innerHTML = h;
+        document.getElementById('list').innerHTML = h || "No data found.";
     }
 
-    function _0x_filter() {
+    function _0x_f() {
         let q = document.getElementById('search').value.toLowerCase();
-        let filtered = {};
-        for (let k in _0x_data) {
-            if (k.toLowerCase().includes(q) || _0x_data[k].toLowerCase().includes(q)) {
-                filtered[k] = _0x_data[k];
+        let fil = {};
+        for (let k in _0x_d) {
+            if (k.toLowerCase().includes(q) || _0x_d[k].toLowerCase().includes(q)) {
+                fil[k] = _0x_d[k];
             }
         }
-        _0x_render(filtered);
+        _0x_r(fil);
     }
 
-    _0x_init();
+    _0x_i();
 </script>
 </body>
 </html>
