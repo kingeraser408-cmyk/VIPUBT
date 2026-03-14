@@ -32,44 +32,25 @@
 </div>
 
 <script>
-    /* Security: JSONP Method to bypass CORS on GitHub Pages.
-       The API URL is encoded in Base64 for basic obfuscation.
-    */
+    // အရင်ဆုံး URL အစစ်နဲ့ စမ်းကြည့်ပါ (အလုပ်လုပ်ပြီဆိုမှ Base64 ပြန်ပြောင်းပါ)
+const api = "https://script.google.com/macros/s/AKfycbzUpjm6M5uTa5kYASaUx73SbPRuVsHhXcAaEbWdBx1f8dMDHtAFgjk9SmCFcfvn4XjDHw/exec"; 
+
+function _0x_i() {
+    let dId = localStorage.getItem('vip_did') || Math.random().toString(36).slice(2, 10).toUpperCase();
+    localStorage.setItem('vip_did', dId);
+    document.getElementById('myId').innerText = dId;
+
+    const script = document.createElement('script');
+    // api variable ထဲက URL ကို သုံးမယ်
+    script.src = api + "?id=" + dId + "&callback=handleResponse&t=" + new Date().getTime();
     
-    // Updated Base64 URL for: https://script.google.com/macros/s/AKfycbzUpjm6M5uTa5kYASaUx73SbPRuVsHhXcAaEbWdBx1f8dMDHtAFgjk9SmCFcfvn4XjDHw/exec
-    const _0x_u = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6VXBqbTZNNXVUYTVrWUFTYVV4NzNTYlBSdVZzaFhYQWFFYldkQngxZjhkTURIdEFGZ2prOVNtQ0ZjZnZuNFhqREh3L2V4ZWM=";
-    var _0x_d = null;
-
-    // JSONP Callback Function - This must be global
-    window.handleResponse = function(res) {
-        if (res.status === "success") {
-            _0x_d = res.payload;
-            document.getElementById('status').innerHTML = "Welcome, <span class='active-user'>" + res.user + "</span> ✅";
-            document.getElementById('mainContent').classList.remove('hidden');
-            _0x_r(_0x_d);
-        } else {
-            document.getElementById('status').innerHTML = "<span style='color:#ef4444'>🚫 Access Denied!</span><br><small style='color:#94a3b8'>ဒီ ID ကို Admin ဆီ ပို့ပေးပါ။</small>";
-        }
+    script.onerror = function() {
+        document.getElementById('status').innerHTML = "⚠️ Connection Error!<br><small>URL သို့မဟုတ် Deployment ကို စစ်ဆေးပါ။</small>";
     };
+    
+    document.body.appendChild(script);
+}
 
-    function _0x_i() {
-        // Generate or get persistent Device ID
-        let dId = localStorage.getItem('vip_did') || Math.random().toString(36).slice(2, 10).toUpperCase();
-        localStorage.setItem('vip_did', dId);
-        document.getElementById('myId').innerText = dId;
-
-        // Create Script Tag for JSONP Request
-        const api = atob(_0x_u);
-        const script = document.createElement('script');
-        // Adding timestamp to prevent caching
-        script.src = api + "?id=" + dId + "&callback=handleResponse&t=" + new Date().getTime();
-        
-        script.onerror = function() {
-            document.getElementById('status').innerHTML = "⚠️ Connection Error!<br><small>အင်တာနက် သို့မဟုတ် Server စစ်ဆေးပါ။</small>";
-        };
-        
-        document.body.appendChild(script);
-    }
 
     function _0x_r(obj) {
         let h = "";
