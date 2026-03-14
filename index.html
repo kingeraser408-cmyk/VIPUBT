@@ -1,1 +1,129 @@
-ok
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KR-MM Standard Dictionary</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Pyidaungsu', 'Noto Sans KR', sans-serif; 
+            padding: 20px; 
+            background: #f1f5f9; 
+            display: flex; 
+            justify-content: center; 
+        }
+        .app-container { 
+            width: 100%; 
+            max-width: 500px; 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            padding: 20px; 
+        }
+        h2 { text-align: center; color: #2563eb; }
+        
+        /* ရှာဖွေရန် Box */
+        .search-box { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 2px solid #2563eb; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            box-sizing: border-box; 
+            margin-bottom: 10px;
+            outline: none;
+        }
+        .stats { font-size: 13px; color: #64748b; margin-bottom: 15px; font-weight: bold; }
+        
+        /* ရလဒ်ပြသသည့် Card */
+        .dict-card { 
+            background: #f8fafc; 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin-bottom: 10px; 
+            border-left: 5px solid #2563eb; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .kor { font-weight: bold; color: #1e3a8a; font-size: 18px; display: block; }
+        .mm { color: #475569; font-size: 16px; margin-top: 5px; display: block; }
+        .no-result { text-align: center; color: #94a3b8; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h2>KR-MM Dictionary</h2>
+    
+    <input type="text" id="searchInput" class="search-box" placeholder="🔍 မြန်မာ သို့ ကိုရီးယားစာ ရိုက်ပါ..." oninput="search()">
+    
+    <div id="stats" class="stats">စကားလုံးပေါင်း: ၀</div>
+    
+    <div id="resultList">
+        <div class="no-result">ရှာဖွေလိုသော စကားလုံးကို ရိုက်ထည့်ပါ။</div>
+    </div>
+</div>
+
+<script>
+    /* ၂။ စကားလုံးများကို Base64 ဖြင့် သိမ်းထားခြင်း
+       (အထဲတွင် 학교, 사과, 우유, 아이, 가방 တို့ ပါဝင်ပါသည်)
+    */
+    const encodedData = "eyLtlZnqtZAnOiAi4ZCc4ZCY4ZC04ZCE4ZCxIiwgIuyCrOqzvCI6ICL aquarium04ZCs4ZCG4ZC64ZCs4ZCxIiwgIuyatOycoCI6ICL aquarium54ZC74ZCs4ZC64ZC74ZCsIiwgIuyVhOydtCI6ICL aquarium04ZC04ZCs4ZC4IiwgIuqwgOuwqSI6ICL aquariumY4ZC64ZCc4ZCxIn0=";
+
+    /* ၃။ Base64 ကို ပြန်ဖြည် (Decode) ပြီး Dictionary ပြောင်းသည့်အပိုင်း */
+    function getDecodedData() {
+        try {
+            // " aquarium" ဆိုသည့် စာသားအမှား ပါနေပါက ဖယ်ထုတ်ရန်
+            const cleanData = encodedData.replace(/ aquarium/g, "");
+            
+            // Base64 မှ စာသားအဖြစ် ပြောင်းလဲခြင်း
+            const decodedString = atob(cleanData); 
+            
+            // Unicode စာလုံးများ (မြန်မာစာ) အမှန်ပေါ်ရန် ပြောင်းလဲခြင်း
+            return JSON.parse(decodeURIComponent(escape(decodedString)));
+        } catch (e) {
+            console.error("Data error:", e);
+            return {};
+        }
+    }
+
+    const dictionaryData = getDecodedData();
+
+    /* ၄။ ရှာဖွေသည့် Function */
+    function search() {
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        const resultList = document.getElementById('resultList');
+        resultList.innerHTML = "";
+        
+        if (query === "") {
+            resultList.innerHTML = '<div class="no-result">ရှာဖွေလိုသော စကားလုံးကို ရိုက်ထည့်ပါ။</div>';
+            return;
+        }
+
+        let count = 0;
+        for (let [kor, mm] of Object.entries(dictionaryData)) {
+            // ကိုရီးယားစာ သို့မဟုတ် မြန်မာစာ ပါဝင်ခြင်း ရှိမရှိ စစ်ဆေးခြင်း
+            if (kor.toLowerCase().includes(query) || mm.toLowerCase().includes(query)) {
+                resultList.innerHTML += `
+                    <div class="dict-card">
+                        <span class="kor">${kor}</span>
+                        <span class="mm">${mm}</span>
+                    </div>`;
+                count++;
+            }
+        }
+
+        if (count === 0) {
+            resultList.innerHTML = '<div class="no-result">ရှာမတွေ့ပါ။</div>';
+        }
+    }
+
+    // စကားလုံး စုစုပေါင်း အရေအတွက်ကို ပြရန်
+    document.getElementById('stats').innerText = `စကားလုံးပေါင်း: ${Object.keys(dictionaryData).length}`;
+
+</script>
+
+</body>
+</html>
