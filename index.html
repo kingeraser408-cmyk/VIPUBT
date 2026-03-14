@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIP Secure Dictionary</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .box { background: #1e293b; padding: 25px; border-radius: 15px; width: 90%; max-width: 450px; text-align: center; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #38bdf8; outline: none; box-sizing: border-box; }
-        .id-badge { font-size: 11px; background: #334155; padding: 5px 10px; border-radius: 20px; color: #94a3b8; margin-bottom: 20px; display: inline-block; font-weight: bold; }
+        .id-badge { font-size: 11px; background: #334155; padding: 5px 10px; border-radius: 20px; color: #94a3b8; margin-bottom: 20px; display: inline-block; }
         #status { font-weight: bold; margin: 20px 0; color: #fbbf24; }
         #list { text-align: left; max-height: 350px; overflow-y: auto; margin-top: 15px; border-top: 1px solid #334155; }
-        .item { padding: 12px; border-bottom: 1px solid #1e293b; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .item { padding: 12px; border-bottom: 1px solid #1e293b; }
         .hidden { display: none; }
-        .active-user { color: #10b981; font-size: 1.1em; }
     </style>
 </head>
 <body>
@@ -22,9 +20,7 @@
 <div class="box">
     <h3>🛡️ VIP Secure Dictionary</h3>
     <div class="id-badge">Device ID: <span id="myId">---</span></div>
-    
     <div id="status">🔄 ဒေတာများ ချိတ်ဆက်နေသည်...</div>
-
     <div id="mainContent" class="hidden">
         <input type="text" id="search" placeholder="ရှာဖွေရန်..." oninput="_0x_f()">
         <div id="list"></div>
@@ -32,46 +28,56 @@
 </div>
 
 <script>
-    // အရင်ဆုံး URL အစစ်နဲ့ စမ်းကြည့်ပါ (အလုပ်လုပ်ပြီဆိုမှ Base64 ပြန်ပြောင်းပါ)
-const api = "https://script.google.com/macros/s/AKfycbzUpjm6M5uTa5kYASaUx73SbPRuVsHhXcAaEbWdBx1f8dMDHtAFgjk9SmCFcfvn4XjDHw/exec"; 
+    // ✅ URL အသစ်ကို အပြည့်အစုံ Base64 ပြန်ပြောင်းထားသည်
+    const _0x_u = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6VXBqbTZNNXVUYTVrWUFTYVV4NzNTYlBSdVZzaFhYQWFFYldkQngxZjhkTURIdEFGZ2prOVNtQ0Zjvn4XjDHdy9leGVj";
+    var _0x_d = null;
 
-function _0x_i() {
-    let dId = localStorage.getItem('vip_did') || Math.random().toString(36).slice(2, 10).toUpperCase();
-    localStorage.setItem('vip_did', dId);
-    document.getElementById('myId').innerText = dId;
-
-    const script = document.createElement('script');
-    // api variable ထဲက URL ကို သုံးမယ်
-    script.src = api + "?id=" + dId + "&callback=handleResponse&t=" + new Date().getTime();
-    
-    script.onerror = function() {
-        document.getElementById('status').innerHTML = "⚠️ Connection Error!<br><small>URL သို့မဟုတ် Deployment ကို စစ်ဆေးပါ။</small>";
+    // JSONP Callback ကို Window Object ထဲ တိုက်ရိုက်ထည့်ခြင်း
+    window.handleResponse = function(res) {
+        if (res.status === "success") {
+            _0x_d = res.payload;
+            document.getElementById('status').innerHTML = "Welcome, <span style='color:#10b981'>" + res.user + "</span> ✅";
+            document.getElementById('mainContent').classList.remove('hidden');
+            _0x_r(_0x_d);
+        } else {
+            document.getElementById('status').innerHTML = "<span style='color:#ef4444'>🚫 Access Denied!</span><br><small>ဒီ ID ကို Admin ဆီ ပို့ပေးပါ။</small>";
+        }
     };
-    
-    document.body.appendChild(script);
-}
 
+    function _0x_i() {
+        let dId = localStorage.getItem('vip_did') || Math.random().toString(36).slice(2, 10).toUpperCase();
+        localStorage.setItem('vip_did', dId);
+        document.getElementById('myId').innerText = dId;
+
+        try {
+            const api = atob(_0x_u);
+            const script = document.createElement('script');
+            // callback=handleResponse ကို သေချာထည့်ထားသည်
+            script.src = api + "?id=" + dId + "&callback=handleResponse&t=" + new Date().getTime();
+            
+            script.onerror = function() {
+                document.getElementById('status').innerHTML = "⚠️ Connection Error!<br><small>Server ချိတ်ဆက်မှု မအောင်မြင်ပါ။</small>";
+            };
+            
+            document.body.appendChild(script);
+        } catch (e) {
+            document.getElementById('status').innerText = "Security Error!";
+        }
+    }
 
     function _0x_r(obj) {
         let h = "";
-        for (let k in obj) {
-            h += `<div class="item"><b style="color:#38bdf8">${k}</b><br><span style="color:#cbd5e1">${obj[k]}</span></div>`;
-        }
-        document.getElementById('list').innerHTML = h || "<p style='color:#64748b'>ဒေတာ မရှိပါ။</p>";
+        for (let k in obj) h += `<div class="item"><b style="color:#38bdf8">${k}</b><br>${obj[k]}</div>`;
+        document.getElementById('list').innerHTML = h || "ဒေတာ မရှိပါ။";
     }
 
     function _0x_f() {
         let q = document.getElementById('search').value.toLowerCase();
         let fil = {};
-        for (let k in _0x_d) {
-            if (k.toLowerCase().includes(q) || _0x_d[k].toLowerCase().includes(q)) {
-                fil[k] = _0x_d[k];
-            }
-        }
+        for (let k in _0x_d) if (k.toLowerCase().includes(q) || _0x_d[k].toLowerCase().includes(q)) fil[k] = _0x_d[k];
         _0x_r(fil);
     }
 
-    // စတင်ပွင့်ချိန်တွင် လုပ်ဆောင်ရန်
     window.onload = _0x_i;
 </script>
 </body>
